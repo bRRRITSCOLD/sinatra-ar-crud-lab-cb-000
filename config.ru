@@ -1,4 +1,4 @@
-equire './config/environment'
+require './config/environment'
 require './app/controllers/application_controller'
 
 if ActiveRecord::Migrator.needs_migration?
