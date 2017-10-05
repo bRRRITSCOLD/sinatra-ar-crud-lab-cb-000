@@ -48,3 +48,5 @@ class ApplicationController < Sinatra::Base
      binding.pry
      erb :deleted
    end
+
+end
