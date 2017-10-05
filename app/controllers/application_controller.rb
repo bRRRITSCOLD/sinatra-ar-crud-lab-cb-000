@@ -1,5 +1,8 @@
 require_relative '../../config/environment'
 
+require 'pry'
+require_relative '../../config/environment'
+
 class ApplicationController < Sinatra::Base
 
   configure do
@@ -7,44 +10,48 @@ class ApplicationController < Sinatra::Base
     set :views, 'app/views'
   end
 
-  get '/posts/new' do #loads new form
-    erb :new
+  get '/' do 
+    
   end
 
-  post '/posts' do  #creates a post
-    @post = Post.create(params)
-    redirect to '/posts'
+  get '/posts/new' do 
+  	erb :new
+  end
+# this is a get request and the user visits this page and renders the form which is in the new template 
+  post '/posts' do 
+    Post.create(params) #This creates a new post
+  	# @post = Post.create(params)
+  	redirect '/posts' #this is submitting a get request... when you redirect you lose scope and therefore the variable
   end
 
-  get '/posts' do #loads index page
-    @posts = Post.all
-    erb :index
+  get '/posts' do
+  	@posts = Post.all
+    # binding.pry 
+  erb :index 
   end
 
-  get '/posts/:id' do  #loads show page
-    @post = Post.find_by_id(params[:id])
+  get '/posts/:id' do 
+    @post = Post.find(params[:id])
+    # binding.pry
     erb :show
   end
 
-  get '/posts/:id/edit' do #loads edit form
-    @post = Post.find_by_id(params[:id])
+  get '/posts/:id/edit' do 
+    @post = Post.find(params[:id])
+    # binding.pry
     erb :edit
   end
 
-  post '/posts/:id' do  #updates a post
-    @post = Post.find_by_id(params[:id])
-    @post.name = params[:name]
-    @post.content = params[:content]
-    @post.save
-    erb :show
+  patch '/posts/:id' do
+    @post = Post.find(params[:id])
+    @post.update(:name => params[:name], :content => params[:content])
+    redirect "/posts/#{@post.id}"
   end
 
-
-  post '/posts/:id/delete' do #delete action
-    @post = Post.find_by_id(params[:id])
-    @post.delete
+  delete '/posts/:id/delete' do 
+    @post = Post.find(params[:id])
+    @post.destroy
     erb :deleted
   end
-
 
 end
