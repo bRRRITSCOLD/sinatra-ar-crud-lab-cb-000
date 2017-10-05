@@ -1,11 +1,9 @@
-require './config/environment'
+equire './config/environment'
 require './app/controllers/application_controller'
 
 if ActiveRecord::Migrator.needs_migration?
   raise 'Migrations are pending. Run `rake db:migrate` to resolve the issue.'
 end
 
-
-run ApplicationController
-
 use Rack::MethodOverride
+run ApplicationController
